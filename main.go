@@ -20,10 +20,10 @@ import (
 )
 
 //IP - host IP
-const IP = "localhost"
+const IP = "46.41.149.6"
 
 //PORT - host Port
-const PORT = "3000"
+const PORT = "80"
 
 var db *gorm.DB
 

@@ -139,7 +139,7 @@ func GetCommentLike(commentID int, nickname string) bool {
 (authorNickame string) - argument to verified Like column */
 func GetMems(authorNickname string) []Mem {
 	var mems []Mem
-	db.Find(&mems)
+	db.Order("dateTime desc").Find(&mems)
 	for index, mem := range mems {
 		mems[index].Like = GetMemLike(mem.ID, authorNickname)
 	}
@@ -150,7 +150,7 @@ func GetMems(authorNickname string) []Mem {
 (nickname string) */
 func GetProfileMems(nickname string) []Mem {
 	var mems []Mem
-	db.Where("authorNickname = ?", nickname).Find(&mems)
+	db.Order("dateTime desc").Where("authorNickname = ?", nickname).Find(&mems)
 	for index, mem := range mems {
 		mems[index].Like = GetMemLike(mem.ID, nickname)
 	}
@@ -188,7 +188,7 @@ func GetProfileMemLike(nickname string) []MemPoint {
 (category string, nickname string) */
 func GetCategoryMems(category string, nickname string) []Mem {
 	var mems []Mem
-	db.Where("category = ?", category).Find(&mems)
+	db.Order("dateTime desc").Where("category = ?", category).Find(&mems)
 	for index, mem := range mems {
 		mems[index].Like = GetMemLike(mem.ID, nickname)
 	}
@@ -310,4 +310,11 @@ func DeleteComment(commentID int) {
 (commentID) */
 func DeleteCommentPointsByCommID(commentID int) {
 	db.Table("commentPoint").Where("commentId = ?", commentID).Delete(CommentPoint{})
+}
+
+/*UpdateCommentContent - ...
+(commentID, contentReplace) */
+func UpdateCommentContent(commentID int, contentReplace string) {
+	var commentDB CommentDB
+	db.Table("comment").Model(&commentDB).Where("id = ?", commentID).Update("content", contentReplace)
 }
